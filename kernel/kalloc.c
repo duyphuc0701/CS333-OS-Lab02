@@ -84,16 +84,16 @@ kalloc(void)
 // Get the number of bytes of free memory
 uint64 get_free_memory()
 {
-  struct run *r;
-  uint64 pages = 0;
+  struct run *free_page;
+  uint64 free_pages_count = 0;
 
   acquire(&kmem.lock);
-  r = kmem.freelist;
-  while (r) {
-    pages++;
-    r = r->next;   
+  free_page = kmem.freelist;
+  while (free_page) {
+    free_pages_count++;
+    free_page = free_page->next;   
   }
   release(&kmem.lock);
 
-  return pages * PGSIZE;
+  return free_pages_count * PGSIZE;
 }

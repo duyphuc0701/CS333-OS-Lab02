@@ -687,16 +687,16 @@ procdump(void)
   }
 }
 
-// Get the num of proccesses
-uint64 get_proccesses_num()
+// Get the number of processes
+uint64 get_processes_num()
 {
-  struct proc *p;
-  uint64 num = 0;
+  struct proc *cur_proc;
+  uint64 active_process_count = 0;
 
-  for(p = proc; p < &proc[NPROC]; p++) {
-    if(p->state != UNUSED) 
-      num++;
+  for(cur_proc = proc; cur_proc < &proc[NPROC]; cur_proc++) {
+    if(cur_proc->state != UNUSED) 
+      active_process_count++;
   }
 
-  return num;
+  return active_process_count;
 }
