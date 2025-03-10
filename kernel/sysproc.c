@@ -101,7 +101,7 @@ sys_sysinfo(void)
   
   struct sysinfo sys_info;
   sys_info.freemem = get_free_memory();
-  sys_info.nproc = get_proccesses_num();
+  sys_info.nproc = get_processes_num();
 
   struct proc *current_proc = myproc();
   if (copyout(current_proc->pagetable, user_sysinfo_addr, (char *)&sys_info, sizeof(sys_info)) < 0)
