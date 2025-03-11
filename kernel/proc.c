@@ -688,7 +688,8 @@ procdump(void)
 }
 
 // Get the number of processes
-uint64 get_processes_num()
+uint64
+get_processes_num(void)
 {
   struct proc *cur_proc;
   uint64 active_process_count = 0;

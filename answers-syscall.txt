@@ -1,0 +1,37 @@
+* Question 1: Looking at the backtrace output, which function called syscall?
+Answer:
+This is the output of the stacktrace:
+#0 syscall () at kernel/syscall.c:135
+#1 0x000000000001e4e in usertrap () at kernel/trap.c:67
+#2 0x505050505050505 in ?? ()
+
+From the stack trace we can see that function usertrap() called syscall() function. 
+
+* Question 2: What is the value of p->trapframe->a7 and what does that value represent?
+(Hint: look user/initcode.S, the first user program xv6 starts.)
+Answer:
+The value of p->trapframe->a7 is 7, which represents the system call number for the exec system call. This is because
+In the file user/initcode.S, before calling ecall, the code loads SYS_exec (whose value is defined as 7 in syscall.h)
+into register a7 using the instruction: li a7, SYS_exec
+
+* Question 3: What was the previous mode that the CPU was in?
+Answer:
+The previous mode that the CPU was in is "user mode". This is because the value of sstatus register in binary is
+100000000000000000000010010, so the SPP bit is 0.
+
+* Question 4: Write down the assembly instruction the kernel is panicing at. Which register corresponds to the variable num?
+Answer:
+The value of sepc is 0x000000008000212e, so we searched for that value in the file kernel/kernel.asm:
+- The assembly instruction the kernel is panicing at is: lw	a3,0(zero)
+- The register corresponds to the variable "num" is: a3
+
+* Question 5: Why does the kernel crash? Hint: look at figure 3-3 in the text; is address 0 mapped in the kernel address
+space? Is that confirmed by the value in scause above? (See description of scause in RISC-V privileged instructions)
+Answer:
+The kernel crashed because it loaded unused memory at address 0. It is confirmed by the fact that the value of register
+"scause" is 13, which corresponds to "Load Page Fault" in RISC-V privileged instructions.
+
+* Question 6: What is the name of the binary that was running when the kernel paniced? What is its process id (pid)?
+Answer:
+- The name of the binary that was running when the kernel paniced is: initcode
+- The process id of initcode is: 1
