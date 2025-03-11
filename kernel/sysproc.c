@@ -94,6 +94,15 @@ sys_uptime(void)
 }
 
 uint64
+sys_trace(void) {
+  int trace_mask;
+  argint(0, &trace_mask);
+  struct proc* p = myproc();
+  p->mask = trace_mask;
+  return 0;
+}
+
+uint64
 sys_sysinfo(void)
 {
   uint64 user_sysinfo_addr;
