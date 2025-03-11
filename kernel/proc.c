@@ -6,6 +6,8 @@
 #include "proc.h"
 #include "defs.h"
 
+#define FP_SCALE 1000
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -701,4 +703,23 @@ get_processes_num(void)
   }
 
   return active_process_count;
+}
+
+// Fixed-point representation of alpha (2/61 * FP_SCALE)
+const uint64 one_min_decay_factor_fp = (2 * FP_SCALE) / 61;
+
+// one_min_load_average is stored in fixed point (scaled by FP_SCALE)
+uint64 one_min_load_average = 0;
+
+void update_one_min_load_average(void)
+{
+  uint64 active_process_count = get_processes_num();
+  one_min_load_average = (one_min_decay_factor_fp * active_process_count +
+                         (FP_SCALE - one_min_decay_factor_fp) * one_min_load_average) / FP_SCALE;
+}
+
+
+uint64 get_one_min_load_average(void)
+{
+  return one_min_load_average;
 }

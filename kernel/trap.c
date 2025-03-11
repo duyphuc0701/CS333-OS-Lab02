@@ -165,6 +165,9 @@ clockintr()
 {
   acquire(&tickslock);
   ticks++;
+  if(ticks % 10 == 0) {
+    update_one_min_load_average();
+  }
   wakeup(&ticks);
   release(&tickslock);
 }
